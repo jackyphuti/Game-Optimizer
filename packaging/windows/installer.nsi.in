@@ -1,0 +1,76 @@
+; NSIS Modern User Interface Installer Script for Game Optimizer
+!include "MUI2.nsh"
+!include "LogicLib.nsh"
+
+Name "Game Optimizer"
+OutFile "game-optimizer-2.0.0-setup.exe"
+InstallDir "$PROGRAMFILES64\GameOptimizer"
+InstallDirRegKey HKCU "Software\GameOptimizer" ""
+RequestExecutionLevel admin
+
+!define MUI_ABORTWARNING
+!define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+
+; Pages
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "..\..\LICENSE"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+
+; Finish page with option to run app
+!define MUI_FINISHPAGE_RUN "$INSTDIR\game-optimizer.exe"
+!define MUI_FINISHPAGE_RUN_PARAMETERS "--tray"
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+!insertmacro MUI_LANGUAGE "English"
+
+Section "Install"
+  SetOutPath "$INSTDIR"
+  
+  File "..\..\build-win\game-optimizer.exe"
+  File "..\..\packaging\profiles\default_profiles.json"
+  File "..\..\LICENSE"
+
+  ; Create shortcuts
+  CreateDirectory "$SMPROGRAMS\Game Optimizer"
+  CreateShortcut "$SMPROGRAMS\Game Optimizer\Game Optimizer.lnk" "$INSTDIR\game-optimizer.exe" "--tray"
+  CreateShortcut "$SMPROGRAMS\Game Optimizer\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortcut "$DESKTOP\Game Optimizer.lnk" "$INSTDIR\game-optimizer.exe" "--tray"
+
+  ; Write registry keys for Add/Remove Programs
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GameOptimizer" "DisplayName" "Game Optimizer"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GameOptimizer" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GameOptimizer" "DisplayIcon" "$INSTDIR\game-optimizer.exe"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GameOptimizer" "DisplayVersion" "2.0.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GameOptimizer" "Publisher" "GameOptimizer Team"
+
+  ; Write uninstaller
+  WriteUninstaller "$INSTDIR\Uninstall.exe"
+SectionEnd
+
+Section "Uninstall"
+  ; Terminate running instances
+  ExecWait 'taskkill /F /IM game-optimizer.exe'
+
+  ; Delete files
+  Delete "$INSTDIR\game-optimizer.exe"
+  Delete "$INSTDIR\default_profiles.json"
+  Delete "$INSTDIR\LICENSE"
+  Delete "$INSTDIR\Uninstall.exe"
+
+  ; Delete shortcuts
+  Delete "$SMPROGRAMS\Game Optimizer\Game Optimizer.lnk"
+  Delete "$SMPROGRAMS\Game Optimizer\Uninstall.lnk"
+  RMDir "$SMPROGRAMS\Game Optimizer"
+  Delete "$DESKTOP\Game Optimizer.lnk"
+
+  ; Remove Add/Remove Programs registry key
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\GameOptimizer"
+  DeleteRegKey HKCU "Software\GameOptimizer"
+
+  RMDir "$INSTDIR"
+SectionEnd

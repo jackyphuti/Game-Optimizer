@@ -1,0 +1,17 @@
+build/
+build-*/
+*.exe
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.rpm
+*.deb
+*.tar.gz
+*.zip
+*.log
+active_session.json
+.vscode/
+.idea/

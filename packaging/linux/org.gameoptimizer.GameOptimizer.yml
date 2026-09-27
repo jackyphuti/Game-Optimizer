@@ -1,0 +1,21 @@
+app-id: org.gameoptimizer.GameOptimizer
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: game-optimizer
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=all
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=com.feralinteractive.GameMode
+  - --system-talk-name=net.hadess.PowerProfiles
+
+modules:
+  - name: game-optimizer
+    buildsystem: cmake-ninja
+    builddir: true
+    sources:
+      - type: dir
+        path: ../../

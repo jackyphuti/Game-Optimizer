@@ -1,0 +1,40 @@
+# CPack Packaging Configuration for Windows and Linux
+set(CPACK_PACKAGE_NAME "game-optimizer")
+set(CPACK_PACKAGE_VENDOR "GameOptimizer Team")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Automated Cross-Platform Game Optimizer for Windows and Linux")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_CONTACT "jacky@gameoptimizer.local")
+
+if(WIN32)
+    set(CPACK_GENERATOR "NSIS;ZIP")
+    set(CPACK_NSIS_DISPLAY_NAME "Game Optimizer")
+    set(CPACK_NSIS_PACKAGE_NAME "Game Optimizer")
+    set(CPACK_NSIS_HELP_LINK "https://github.com/jackyphuti/Game-Optimizer")
+    set(CPACK_NSIS_MODIFY_PATH ON)
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "GameOptimizer")
+    set(CPACK_NSIS_MUI_FINISHPAGE_RUN "game-optimizer.exe")
+    set(CPACK_PACKAGE_EXECUTABLES "game-optimizer" "Game Optimizer")
+    set(CPACK_CREATE_DESKTOP_LINKS "game-optimizer")
+else()
+    set(CPACK_GENERATOR "RPM;DEB;TGZ")
+    
+    # RPM configuration
+    set(CPACK_RPM_PACKAGE_LICENSE "MIT")
+    set(CPACK_RPM_PACKAGE_GROUP "Amusements/Games")
+    set(CPACK_RPM_PACKAGE_AUTOREQPROV yes)
+    set(CPACK_RPM_PACKAGE_RELEASE "1")
+
+    # DEB configuration
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "GameOptimizer Team <support@gameoptimizer.local>")
+    set(CPACK_DEBIAN_PACKAGE_SECTION "games")
+    set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS OFF)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.31)")
+endif()
+
+include(CPack)

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Game Optimizer
+GenericName=System Game Optimizer
+Comment=Automatically detects game launches, applies high-performance tweaks, and reverts upon exit
+Exec=game-optimizer --tray
+Icon=gameoptimizer
+Terminal=false
+Categories=Game;System;Utility;
+Keywords=game;optimizer;performance;tuning;gamemode;
+StartupNotify=false
+X-GNOME-Autostart-enabled=true
