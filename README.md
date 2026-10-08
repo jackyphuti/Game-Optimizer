@@ -1,10 +1,49 @@
-# Cross-Platform Game Optimizer (Windows + Linux)
+# 🏎️ Apex Overdrive (v3.0) — Next-Gen Automotive Gaming Engine & Cluster
 
-A lightweight, high-performance, and modular desktop game optimizer written in modern C++ (C++17/C++20). The application automatically detects when a game launches, engages system-level performance tweaks, and cleanly reverts all modifications back to their exact previous state when the game closes or if the application exits abnormally.
+<p align="center">
+  <img src="assets/logo.png" alt="Apex Overdrive Logo" width="180">
+  <br>
+  <b>High-Octane Desktop Game Optimizer with Automotive Gauge Cluster & PC Hardware Scanner</b>
+  <br>
+  <i>Cross-Platform (Windows 10/11 + Linux) • C++ Native Core • Zero Frame-Drops</i>
+</p>
 
 ---
 
-## Features
+## 🌟 What is Apex Overdrive?
+
+**Apex Overdrive** is a next-generation desktop gaming optimization suite and live telemetry cockpit. It combines low-level system engineering with an immersive **cyberpunk automotive racing cluster**, dynamic **sequential shift-light LEDs**, an automated **PC Hardware Capability Benchmark Scanner**, and the **Warp Drive Turbo Boost Engine**.
+
+When you launch any game, Apex Overdrive automatically elevates process scheduling, trims background resource hogs, unparks CPU cores, lowers system timer resolution to 0.5ms, and tunes your GPU for maximum frame rates. When your game session concludes, it cleanly rolls back every setting to factory defaults.
+
+---
+
+## ⚡ Core Features
+
+### 🏎️ Automotive Car Cluster Cockpit
+- **Tachometer & Speedometer Dials**: Precision canvas-rendered dials for **CPU Load**, **GPU Engine**, and **RAM Boost Utilization** with realistic needle physics and redline warnings.
+- **Sequential Shift-Light LED Bar**: 10-stage sequential racing shift lights (Green → Amber → Redline) reacting in real time to system workload.
+- **Startup Ignition Gauge Sweep**: Authentic sports car gauge sweep sequence (0 → 100 → 0) on application startup.
+- **Center HUD Telemetry**: Live readouts for estimated FPS boost, system multimedia timer resolution (0.5ms), power schemes, and GPU clock states.
+
+### 💻 Automatic PC Hardware Benchmark Scanner
+- **Deep Architecture Inspection**: Automatically inspects processor cores/threads/clocks, graphics card model/VRAM, memory capacity/speed/dual-channel mode, and NVMe SSD DirectStorage support.
+- **Gaming Capability Benchmark**: Calculates your system's gaming benchmark score (0–100) and awards an official rank:
+  - 🏆 **Tier S+ (Apex Titan)**
+  - 🥇 **Tier S (Ultra High-End)**
+  - 🥈 **Tier A (High Performance)**
+  - 🥉 **Tier B (Esports Ready)**
+
+### 🚀 Warp Drive Turbo Boost Engine
+- **Aggressive CPU Turbo Scaling**: Locks processor performance boost mode to aggressive frequency scaling curves.
+- **CPU Core Unparking (100% Cores Active)**: Bypasses Windows core parking, eliminating frame stutters during intensive gaming scenes.
+- **0.5ms High-Precision Multimedia Timer**: Lowers OS scheduler quantum from standard 15.6ms to 0.5ms, eliminating micro-stutters and input lag.
+- **Network Gaming Latency Optimizer**: Eliminates Nagle's algorithm delay (`TcpAckFrequency` / `TCPNoDelay`) for lowest online ping and jitter.
+- **DirectX Discrete GPU Routing**: Forces graphics workloads strictly onto high-performance discrete GPUs.
+
+### 🧹 Instant Standby RAM Purge
+- **Pneumatic Blow-Off Valve**: Instant flush of standby memory cache and working set trimming with tactile audio feedback.
+- **Safe Rollback**: Revert to Balanced/Factory defaults at any time with a single click.
 
 ### 1. Game Detection
 - **Windows**: Fast process polling using `CreateToolhelp32Snapshot` / `Process32FirstW` / `Process32NextW` with full executable image path resolution via `QueryFullProcessImageNameA`.

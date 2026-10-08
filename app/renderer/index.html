@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Overdrive - Next-Gen Gaming Engine & Cluster</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Custom Draggable Titlebar -->
+    <header class="titlebar">
+        <div class="titlebar-brand">
+            <img src="../assets/logo.png" alt="Logo" class="brand-logo">
+            <span class="brand-text">APEX OVERDRIVE</span>
+            <div class="status-badge" id="systemStatusBadge">
+                <div class="status-dot"></div>
+                <span id="systemStatusText">SYSTEM READY</span>
+            </div>
+        </div>
+        <div class="window-controls">
+            <button class="win-btn" id="btnMin">─</button>
+            <button class="win-btn" id="btnMax">□</button>
+            <button class="win-btn close" id="btnClose">✕</button>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-tab active" data-tab="cockpit">🏎️ CLUSTER COCKPIT</div>
+        <div class="nav-tab" data-tab="scanner">💻 PC SCANNER & SPECS</div>
+        <div class="nav-tab" data-tab="tuning">⚡ TURBO OVERDRIVE</div>
+        <div class="nav-tab" data-tab="vault">🎮 GAME VAULT</div>
+    </nav>
+
+    <!-- Main View Area -->
+    <main class="main-view">
+        <!-- 1. CLUSTER COCKPIT TAB -->
+        <section id="tab-cockpit" class="tab-content">
+            <!-- Sequential Shift-Light LED Bar -->
+            <div class="shift-light-bar">
+                <div class="shift-led green" id="led1"></div>
+                <div class="shift-led green" id="led2"></div>
+                <div class="shift-led green" id="led3"></div>
+                <div class="shift-led green" id="led4"></div>
+                <div class="shift-led amber" id="led5"></div>
+                <div class="shift-led amber" id="led6"></div>
+                <div class="shift-led amber" id="led7"></div>
+                <div class="shift-led red" id="led8"></div>
+                <div class="shift-led red" id="led9"></div>
+                <div class="shift-led red" id="led10"></div>
+            </div>
+
+            <!-- Automotive Gauge Cluster Grid -->
+            <div class="cluster-grid">
+                <!-- CPU Tachometer Gauge -->
+                <div class="gauge-card">
+                    <canvas id="gaugeCpu"></canvas>
+                </div>
+
+                <!-- GPU Speedometer Gauge -->
+                <div class="gauge-card">
+                    <canvas id="gaugeGpu"></canvas>
+                </div>
+
+                <!-- RAM Boost Gauge -->
+                <div class="gauge-card">
+                    <canvas id="gaugeRam"></canvas>
+                </div>
+            </div>
+
+            <!-- Center HUD Flight/Speed Banner -->
+            <div class="hud-center-banner" style="margin-top: 20px;">
+                <div class="hud-stat">
+                    <span class="hud-label">ESTIMATED FPS BOOST</span>
+                    <span class="hud-val green" id="hudFpsBoost">+15 ~ +35 FPS</span>
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-label">SYSTEM TIMER RESOLUTION</span>
+                    <span class="hud-val cyan" id="hudTimer">0.500 ms (ULTRA)</span>
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-label">POWER SCHEME</span>
+                    <span class="hud-val amber" id="hudPowerScheme">ULTIMATE PERFORMANCE</span>
+                </div>
+                <div class="hud-stat">
+                    <span class="hud-label">GPU CLOCK PROFILE</span>
+                    <span class="hud-val cyan" id="hudGpuState">MAX PERFORMANCE P0</span>
+                </div>
+            </div>
+
+            <!-- Quick Action Command Deck -->
+            <div class="action-deck" style="margin-top: 20px;">
+                <div class="turbo-switch-box">
+                    <div class="turbine-icon" id="turbineIcon">⚡</div>
+                    <div class="turbo-meta">
+                        <h3 id="turboStatusHeading">WARP DRIVE DISENGAGED</h3>
+                        <p id="turboStatusDesc">Click below to unlock aggressive CPU Turbo & unpark all cores</p>
+                    </div>
+                    <button class="btn-warp-drive" id="btnToggleTurbo">
+                        <span>⚡ ENGAGE TURBO BOOST</span>
+                    </button>
+                </div>
+                <div class="deck-buttons">
+                    <button class="btn-action purge" id="btnPurgeRam">
+                        <span>🧹 PURGE STANDBY RAM</span>
+                    </button>
+                    <button class="btn-action" id="btnRestoreDefaults">
+                        <span>↺ RESTORE DEFAULTS</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PC SCANNER & SPECS TAB -->
+        <section id="tab-scanner" class="tab-content" style="display: none;">
+            <div class="scanner-view">
+                <!-- Gaming Tier Score Banner -->
+                <div class="tier-banner">
+                    <div>
+                        <div class="tier-title">PC GAMING CAPABILITY BENCHMARK</div>
+                        <div class="tier-name" id="scannerTierName">SCANNING SYSTEM...</div>
+                        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;" id="scannerTierDesc">
+                            Analyzing CPU, GPU Architecture, RAM Latency, and Storage throughput...
+                        </p>
+                    </div>
+                    <div class="score-circle">
+                        <span class="hud-label">BENCHMARK SCORE</span>
+                        <span class="score-num" id="scannerScoreNum">--</span>
+                        <span style="color: var(--cyan); font-weight: 700; font-size: 13px;">/ 100</span>
+                    </div>
+                </div>
+
+                <!-- Hardware Specifications Cards -->
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <div class="spec-icon">🧠</div>
+                        <div class="spec-info">
+                            <h4>PROCESSOR (CPU)</h4>
+                            <h3 id="specCpuName">Detecting CPU...</h3>
+                            <p id="specCpuDetails">Cores / Threads / Base Clock</p>
+                        </div>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-icon">🎮</div>
+                        <div class="spec-info">
+                            <h4>GRAPHICS CARD (GPU)</h4>
+                            <h3 id="specGpuName">Detecting GPU...</h3>
+                            <p id="specGpuDetails">VRAM / Vendor / Driver</p>
+                        </div>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-icon">⚡</div>
+                        <div class="spec-info">
+                            <h4>MEMORY (RAM)</h4>
+                            <h3 id="specRamName">Detecting RAM...</h3>
+                            <p id="specRamDetails">Total Capacity / Speed / Dual Channel</p>
+                        </div>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-icon">💾</div>
+                        <div class="spec-info">
+                            <h4>STORAGE ARCHITECTURE</h4>
+                            <h3 id="specStorageName">Detecting Storage...</h3>
+                            <p id="specStorageDetails">NVMe SSD / High-Speed Gaming Drive</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <button class="btn-action" id="btnRescan">
+                        <span>🔄 RE-SCAN PC HARDWARE</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. TURBO OVERDRIVE TUNING TAB -->
+        <section id="tab-tuning" class="tab-content" style="display: none;">
+            <div class="tuning-grid">
+                <div class="tune-item">
+                    <div class="tune-text">
+                        <h4>Aggressive CPU Turbo Boost</h4>
+                        <p>Locks processor performance boost mode to aggressive frequency scaling.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tuneCpuBoost" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="tune-item">
+                    <div class="tune-text">
+                        <h4>CPU Core Unparking (100% Cores Active)</h4>
+                        <p>Prevents Windows from putting inactive CPU cores into low-power parking states.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tuneCoreUnpark" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="tune-item">
+                    <div class="tune-text">
+                        <h4>High-Precision Multimedia Timer (0.5ms)</h4>
+                        <p>Lowers Windows scheduling quantum to 0.5ms, eliminating micro-stutters and input lag.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tuneTimerRes" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="tune-item">
+                    <div class="tune-text">
+                        <h4>Network Gaming Latency Optimizer</h4>
+                        <p>Disables Nagle's algorithm and minimizes TCP ACK frequency for low ping.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tuneNetwork" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="tune-item">
+                    <div class="tune-text">
+                        <h4>DirectX High-Performance GPU Routing</h4>
+                        <p>Forces graphics workloads strictly to the high-performance discrete GPU.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tuneGpuRouting" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="tune-item">
+                    <div class="tune-text">
+                        <h4>Background Process Throttling</h4>
+                        <p>Automatically lowers priority of Discord, Chrome, Spotify, and launchers while gaming.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="tuneBackgroundThrottle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. GAME VAULT TAB -->
+        <section id="tab-vault" class="tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-family: 'Orbitron'; font-size: 20px; color: #fff;">INSTALLED GAME LIBRARY</h3>
+                <span style="font-size: 13px; color: var(--text-muted);">Auto-detection and instant boost on launch active</span>
+            </div>
+            <div class="game-vault-grid" id="gameVaultGrid">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Telemetry Ticker -->
+    <footer class="ticker-footer">
+        <span class="ticker-icon">●</span>
+        <span id="tickerLog">TELEMETRY STREAM: Apex Overdrive background monitor initialized // All sensors nominal.</span>
+    </footer>
+
+    <!-- Audio FX & Scripts -->
+    <script src="audio.js"></script>
+    <script src="cluster.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
