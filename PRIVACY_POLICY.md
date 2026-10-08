@@ -3,8 +3,9 @@
 **Last Updated:** October 8, 2026  
 **Effective Date:** October 8, 2026  
 **Application Name:** Apex Overdrive  
-**Developer / Publisher:** Jacky Phuti  
-**Contact Email:** jackyphuti@users.noreply.github.com  
+**Developer / Publisher:** Jacky Mpoka (@jackyphuti)  
+**Contact Email:** jackympoka22@gmail.com  
+**Website:** https://axis-technologies-za.github.io/AxisTech/projects.html#apex-overdrive  
 **Repository:** https://github.com/jackyphuti/Game-Optimizer  
 
 ---
@@ -75,6 +76,7 @@ https://github.com/jackyphuti/Game-Optimizer/blob/main/PRIVACY_POLICY.md
 ## 8. Contact Information
 If you have any questions or feedback regarding this Privacy Policy or the security practices of Apex Overdrive, please contact:
 
-- **Publisher:** Jacky Phuti
-- **Email:** jackyphuti@users.noreply.github.com
+- **Publisher:** Jacky Mpoka
+- **Email:** jackympoka22@gmail.com
 - **Project URL:** https://github.com/jackyphuti/Game-Optimizer/issues
+- **Official Website:** https://axis-technologies-za.github.io/AxisTech/projects.html#apex-overdrive
