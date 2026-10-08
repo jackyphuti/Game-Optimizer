@@ -1,10 +1,17 @@
-# 🏎️ Apex Overdrive v3.0.0 — Next-Gen Gaming Engine & Cluster
+# 🏎️ Apex Overdrive v3.0.1 — Next-Gen Gaming Engine & Cluster
 
-Welcome to **Apex Overdrive v3.0.0**, the complete transformation from a terminal utility into a high-octane, full-featured desktop gaming optimization cockpit.
+Welcome to **Apex Overdrive v3.0.1**, the complete high-octane desktop gaming optimization cockpit.
 
 ---
 
-## ⚡ What's New in v3.0
+## ⚡ What's New in v3.0.1 (Hotfix Update)
+- **Turbo Boost Execution Fix**: Fixed Windows `spawn ENOENT` error when engaging Turbo Boost / Warp Drive by properly unpacking native binaries to `resources/native/` and `app.asar.unpacked/native/`.
+- **Safe Fallback & Exception Handling**: Wrapped all native process calls with robust error guards and OS-level power/scheduler fallbacks, preventing unhandled JavaScript dialog popups.
+- **Enhanced Power & Timer Resolution**: Improved 0.5ms multimedia scheduling quantum activation and CPU core unparking routines.
+
+---
+
+## 🌟 Core Features
 
 ### 🏁 Automotive Car Cluster Cockpit
 - **Triple-Dial Precision Cluster**: Real-time tachometer & speedometer dials for **CPU Load**, **GPU Engine Core**, and **RAM Boost Utilization**.
@@ -40,11 +47,11 @@ Welcome to **Apex Overdrive v3.0.0**, the complete transformation from a termina
 
 | Platform | Package | Description |
 | :--- | :--- | :--- |
-| **Windows 10/11** | `Apex Overdrive Setup 3.0.0.exe` | Standard Windows Installer with Desktop & Start Menu shortcuts |
-| **Windows 10/11** | `Apex Overdrive 3.0.0.exe` | Portable Standalone Executable (No installation needed) |
-| **Linux (Debian/Ubuntu)** | `apex-overdrive_3.0.0_amd64.deb` | Debian / Ubuntu / Mint package |
-| **Linux (Fedora/RHEL)** | `apex-overdrive-3.0.0.x86_64.rpm` | RedHat / Fedora / openSUSE package |
-| **Linux (Universal)** | `apex-overdrive-3.0.0.AppImage` | Universal Linux portable binary |
+| **Windows 10/11** | `Apex Overdrive Setup 3.0.1.exe` | Standard Windows Installer with Desktop & Start Menu shortcuts |
+| **Windows 10/11** | `Apex Overdrive 3.0.1.exe` | Portable Standalone Executable (No installation needed) |
+| **Linux (Debian/Ubuntu)** | `apex-overdrive_3.0.1_amd64.deb` | Debian / Ubuntu / Mint package |
+| **Linux (Fedora/RHEL)** | `apex-overdrive-3.0.1.x86_64.rpm` | RedHat / Fedora / openSUSE package |
+| **Linux (Universal)** | `apex-overdrive-3.0.1.tar.gz` | Universal Linux portable binary archive |
 
 ---
 

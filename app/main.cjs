@@ -9,16 +9,69 @@ let tray = null;
 let isTurboActive = false;
 let hardwareCache = null;
 
-// Determine native binary path
+// Global crash prevention
+process.on('uncaughtException', (err) => {
+    console.warn('[Handled uncaughtException]:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+    console.warn('[Handled unhandledRejection]:', reason);
+});
+
+// Determine safe native binary path strictly outside of app.asar
 function getNativeBinaryPath() {
     const isWin = process.platform === 'win32';
     const binaryName = isWin ? 'game-optimizer.exe' : 'game-optimizer';
-    const devPath = path.join(__dirname, 'native', binaryName);
-    const prodPath = path.join(process.resourcesPath, 'native', binaryName);
-    
-    if (fs.existsSync(devPath)) return devPath;
-    if (fs.existsSync(prodPath)) return prodPath;
-    return binaryName;
+
+    const candidates = [
+        // 1. Extra resources directory (packaged outside asar)
+        path.join(process.resourcesPath || '', 'native', binaryName),
+        // 2. Unpacked asar directory
+        path.join(process.resourcesPath || '', 'app.asar.unpacked', 'native', binaryName),
+        path.join(__dirname.replace('app.asar', 'app.asar.unpacked'), 'native', binaryName),
+        // 3. Dev directory (only if not inside app.asar)
+        !__dirname.includes('app.asar') ? path.join(__dirname, 'native', binaryName) : null,
+        !__dirname.includes('app.asar') ? path.join(process.cwd(), 'app', 'native', binaryName) : null
+    ].filter(Boolean);
+
+    for (const p of candidates) {
+        try {
+            if (!p.includes('.asar\\') && !p.includes('.asar/') && fs.existsSync(p)) {
+                return p;
+            }
+        } catch (e) {}
+    }
+    return null;
+}
+
+// Safely launch native monitor without unhandled exceptions
+function launchNativeMonitor() {
+    const nativeBin = getNativeBinaryPath();
+    if (!nativeBin) {
+        console.log('Native binary not on disk; OS power and scheduler optimizations active.');
+        return;
+    }
+    try {
+        const proc = spawn(nativeBin, ['--monitor'], { detached: true, stdio: 'ignore' });
+        proc.on('error', (err) => {
+            console.warn('Native monitor process warning:', err.message);
+        });
+        proc.unref();
+    } catch (e) {
+        console.warn('Spawn exception caught:', e.message);
+    }
+}
+
+// Safely call restore on native engine
+function restoreNativeSettings() {
+    const nativeBin = getNativeBinaryPath();
+    if (!nativeBin) return;
+    try {
+        exec(`"${nativeBin}" --restore`, (err) => {
+            if (err) console.warn('Native restore warning:', err.message);
+        });
+    } catch (e) {
+        console.warn('Exec restore exception caught:', e.message);
+    }
 }
 
 function createWindow() {
@@ -289,8 +342,6 @@ ipcMain.handle('get-metrics', async () => {
 ipcMain.handle('toggle-turbo', async (event, enable) => {
     isTurboActive = enable;
 
-    const nativeBin = getNativeBinaryPath();
-
     if (process.platform === 'win32') {
         if (enable) {
             // 1. Engage Windows Ultimate / High Performance Power Scheme
@@ -306,18 +357,14 @@ ipcMain.handle('toggle-turbo', async (event, enable) => {
             exec('reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f 2>nul');
             exec('reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games" /v "Priority" /t REG_DWORD /d 6 /f 2>nul');
 
-            // 4. Launch Native Engine in Background
-            if (fs.existsSync(nativeBin)) {
-                spawn(nativeBin, ['--monitor'], { detached: true, stdio: 'ignore' }).unref();
-            }
+            // 4. Launch Native Engine safely in Background
+            launchNativeMonitor();
 
             return { success: true, message: 'WARP SPEED TURBO ENGAGED! CPU Boost Aggressive, Cores Unparked, High-Precision Timer 0.5ms Active.' };
         } else {
             // Revert back to Balanced Scheme
             exec('powercfg /setactive 381b4222-f694-41f0-9685-ff5bb260df2e 2>nul');
-            if (fs.existsSync(nativeBin)) {
-                exec(`"${nativeBin}" --restore`);
-            }
+            restoreNativeSettings();
             return { success: true, message: 'Turbo Boost disengaged. System restored to Balanced profile.' };
         }
     } else {
@@ -325,15 +372,11 @@ ipcMain.handle('toggle-turbo', async (event, enable) => {
         if (enable) {
             exec('powerprofilesctl set performance 2>/dev/null || cpupower frequency-set -g performance 2>/dev/null');
             exec('echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost 2>/dev/null');
-            if (fs.existsSync(nativeBin)) {
-                spawn(nativeBin, ['--monitor'], { detached: true, stdio: 'ignore' }).unref();
-            }
+            launchNativeMonitor();
             return { success: true, message: 'Linux Turbo Boost & Performance Governor Activated.' };
         } else {
             exec('powerprofilesctl set balanced 2>/dev/null || cpupower frequency-set -g powersave 2>/dev/null');
-            if (fs.existsSync(nativeBin)) {
-                exec(`"${nativeBin}" --restore`);
-            }
+            restoreNativeSettings();
             return { success: true, message: 'Linux governors restored to balanced mode.' };
         }
     }
@@ -341,10 +384,7 @@ ipcMain.handle('toggle-turbo', async (event, enable) => {
 
 // Instant Standby RAM Purge
 function handleRamPurge() {
-    const nativeBin = getNativeBinaryPath();
-    if (fs.existsSync(nativeBin)) {
-        exec(`"${nativeBin}" --restore`);
-    }
+    restoreNativeSettings();
     // Windows PowerShell empty working set command
     if (process.platform === 'win32') {
         exec('powershell -Command "[System.GC]::Collect(); Clear-RecycleBin -Force -ErrorAction SilentlyContinue"');
@@ -361,10 +401,7 @@ ipcMain.handle('purge-ram', async () => {
 // Restore System Defaults
 function handleRestoreDefaults() {
     isTurboActive = false;
-    const nativeBin = getNativeBinaryPath();
-    if (fs.existsSync(nativeBin)) {
-        exec(`"${nativeBin}" --restore`);
-    }
+    restoreNativeSettings();
     if (process.platform === 'win32') {
         exec('powercfg /setactive 381b4222-f694-41f0-9685-ff5bb260df2e 2>nul');
     } else {

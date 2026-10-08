@@ -1,7 +1,7 @@
 {
   "name": "apex-overdrive",
   "productName": "Apex Overdrive",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Apex Overdrive - Next-Gen Automotive Gaming Engine & Hardware Optimizer",
   "main": "main.cjs",
   "type": "commonjs",
@@ -37,6 +37,16 @@
       "renderer/**/*",
       "assets/**/*",
       "native/**/*"
+    ],
+    "asarUnpack": [
+      "native/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "native",
+        "to": "native",
+        "filter": ["**/*"]
+      }
     ],
     "win": {
       "target": [
